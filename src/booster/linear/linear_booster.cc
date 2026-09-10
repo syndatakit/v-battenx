@@ -29,8 +29,7 @@ public:
 
         Eigen::MatrixXf Xw = X.array().colwise() * h.array();
         Eigen::MatrixXf A  = Xw.transpose() * X;
-        // Regularise feature weights only; bias (last column) is unpenalised.
-        for (int c = 0; c < C; ++c) A(c, c) += reg_lambda_;
+        A.diagonal().array() += reg_lambda_;
         Eigen::VectorXf b_vec = -(Xw.transpose() * g);
         weights_ = A.ldlt().solve(b_vec);
 
